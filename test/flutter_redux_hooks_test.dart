@@ -25,6 +25,25 @@ void main() {
       expect(captor.store, store);
     });
 
+    testWidgets('passes a Redux Store down to its descendants within the initState',
+        (WidgetTester tester) async {
+      final store = Store<String>(
+        identityReducer,
+        initialState: 'I',
+      );
+      final widget = StoreProvider<String>(
+        store: store,
+        child: StoreCaptor<String>(listen: false),
+      );
+
+      await tester.pumpWidget(widget);
+
+      final captor =
+          tester.firstWidget<StoreCaptor>(find.byKey(StoreCaptor.captorKey));
+
+      expect(captor.store, store);
+  });
+
     testWidgets('throws a helpful message if no provider found',
         (WidgetTester tester) async {
       final store = Store<String>(
@@ -166,12 +185,15 @@ class StoreCaptor<S> extends StatelessWidget {
   static const Key captorKey = Key('StoreCaptor');
 
   late Store<S> store;
+  bool listen;
 
-  StoreCaptor() : super(key: captorKey);
+  StoreCaptor({
+    this.listen = true,
+  }) : super(key: captorKey);
 
   @override
   Widget build(BuildContext context) {
-    store = StoreProvider.of<S>(context);
+    store = StoreProvider.of<S>(context, listen: listen);
 
     return Container();
   }
