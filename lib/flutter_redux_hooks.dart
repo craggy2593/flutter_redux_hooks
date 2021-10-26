@@ -160,6 +160,7 @@ Dispatch useDispatch<S>() => useStore<S>().dispatch;
 
 /// Selector Function
 typedef Selector<State, Output> = Output Function(State state);
+
 /// Equality Function
 typedef EqualityFn<T> = bool Function(T a, T b);
 

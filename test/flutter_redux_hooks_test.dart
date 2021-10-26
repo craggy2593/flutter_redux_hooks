@@ -135,7 +135,8 @@ void main() {
       expect(state, 'init');
     });
 
-    testWidgets('should yield the state resulting from the last dispatch', (tester) async {
+    testWidgets('should yield the state resulting from the last dispatch',
+        (tester) async {
       await tester.pumpWidget(widget());
       store.dispatch('A');
       await tester.pumpWidget(widget());
