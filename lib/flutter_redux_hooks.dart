@@ -73,10 +73,18 @@ class StoreProvider<S> extends InheritedWidget {
         ? context.dependOnInheritedWidgetOfExactType<StoreProvider<S>>()
         : context
             .getElementForInheritedWidgetOfExactType<StoreProvider<S>>()
-            ?.widget) as StoreProvider<S>;
+            ?.widget) as StoreProvider<S>?;
+
+    if (provider == null) {
+      final type = _typeOf<StoreProvider<S>>();
+      throw StoreProviderError(type);
+    }
 
     return provider._store;
   }
+
+  // Workaround to capture generics
+  static Type _typeOf<T>() => T;
 
   @override
   bool updateShouldNotify(StoreProvider<S> oldWidget) =>
